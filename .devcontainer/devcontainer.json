@@ -23,6 +23,6 @@
 		}
 	},
 	"forwardPorts": [22],
-	"postCreateCommand": "uname -a",
+	"postCreateCommand": "echo oracle | sqlplus sys as sysdba",
 	"remoteUser": "vscode"
 }
