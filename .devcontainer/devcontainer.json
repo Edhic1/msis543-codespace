@@ -1,28 +1,28 @@
 {
-	"name": "Ubuntu",
-	"build": {
-		"dockerfile": "Dockerfile",
-		"args": { "VARIANT": "ubuntu-22.04" }
-	},
-	"extensions": [
-		"Oracle.oracledevtools",
-		"GitHub.copilot"
-	],
-	"features": {
-		"common": {
-			"username": "automatic",
-			"uid": "automatic",
-			"gid": "automatic",
-			"installZsh": true,
-			"installOhMyZsh": true,
-			"upgradePackages": true,
-			"nonFreePackages": false
-		},
-		"ghcr.io/devcontainers/features/sshd:1": {
-			"version": "latest"
-		}
-	},
-	"forwardPorts": [22],
-	"postCreateCommand": "echo oracle | sqlplus sys as sysdba",
-	"remoteUser": "vscode"
+    "name": "Ubuntu",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": { "VARIANT": "ubuntu-22.04" }
+    },
+    "extensions": [
+        "Oracle.oracledevtools",
+        "GitHub.copilot"
+    ],
+    "features": {
+        "common": {
+            "username": "automatic",
+            "uid": "automatic",
+            "gid": "automatic",
+            "installZsh": true,
+            "installOhMyZsh": true,
+            "upgradePackages": true,
+            "nonFreePackages": false
+        },
+        "ghcr.io/devcontainers/features/sshd:1": {
+            "version": "latest"
+        }
+    },
+    "forwardPorts": [22, 1521, 5500],
+    "postCreateCommand": "echo oracle | sqlplus sys as sysdba",
+    "remoteUser": "vscode"
 }
