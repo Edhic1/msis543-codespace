@@ -1,10 +1,27 @@
-# [Choice] Ubuntu version (use ubuntu-22.04 or ubuntu-18.04 on local arm64/Apple Silicon): ubuntu-22.04, ubuntu-20.04, ubuntu-18.04
+# Use Ubuntu as the base image
 ARG VARIANT="jammy"
 FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
 
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
+# Install required packages and dependencies
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y \
+    libaio1 net-tools bc && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set Oracle passwords
-ENV ORACLE_PWD=oracle
+# Download Oracle XE 21c
+RUN curl -o oracle-xe-21c.deb -L https://download.oracle.com/otn_software/linux/instantclient/216000/oracle-instantclient-basic-21.6.0.0.0-1.el8.x86_64.rpm
+
+# Install Oracle XE 21c
+RUN dpkg -i oracle-xe-21c.deb && \
+    rm oracle-xe-21c.deb
+
+# Set environment variables for Oracle
+ENV ORACLE_HOME=/opt/oracle/product/21c/dbhomeXE \
+    PATH=$PATH:/opt/oracle/product/21c/dbhomeXE/bin \
+    ORACLE_SID=XE \
+    ORACLE_PWD=oracle
+
+# Expose ports
+EXPOSE 1521 5500
+
+# Start Oracle listener and database
+CMD ["/opt/oracle/product/21c/dbhomeXE/bin/tnslsnr", "start"]
