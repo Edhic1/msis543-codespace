@@ -4,15 +4,16 @@ FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
 
 # Install required packages and dependencies
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y \
-    libaio1 net-tools bc && \
+    libaio1 net-tools bc alien && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Download Oracle XE 21c
-RUN curl -o oracle-xe-21c.deb -L https://download.oracle.com/otn_software/linux/instantclient/216000/oracle-instantclient-basic-21.6.0.0.0-1.el8.x86_64.rpm
+RUN curl -o oracle-xe-21c.rpm -L https://download.oracle.com/otn_software/linux/instantclient/216000/oracle-instantclient-basic-21.6.0.0.0-1.el8.x86_64.rpm
 
-# Install Oracle XE 21c
-RUN dpkg -i oracle-xe-21c.deb && \
-    rm oracle-xe-21c.deb
+# Convert RPM to Debian package
+RUN alien -d oracle-xe-21c.rpm && \
+    dpkg -i oracle-xe-21c_21.6.0.0.0-2_amd64.deb && \
+    rm oracle-xe-21c.rpm oracle-xe-21c_21.6.0.0.0-2_amd64.deb
 
 # Set environment variables for Oracle
 ENV ORACLE_HOME=/opt/oracle/product/21c/dbhomeXE \
