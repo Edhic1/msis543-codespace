@@ -12,9 +12,9 @@ RUN curl -o oracle-xe-21c.rpm -L https://download.oracle.com/otn_software/linux/
 
 # Convert RPM to Debian package
 RUN alien -d oracle-xe-21c.rpm && \
-    dpkg -i oracle-xe-21c_21.6.0.0.0-2_amd64.deb && \
-    rm oracle-xe-21c.rpm oracle-xe-21c_21.6.0.0.0-2_amd64.deb
-
+    dpkg -i oracle-instantclient-basic_21.6.0.0.0-2_amd64.deb && \
+    rm oracle-xe-21c.rpm oracle-instantclient-basic_21.6.0.0.0-2_amd64.deb
+    
 # Set environment variables for Oracle
 ENV ORACLE_HOME=/opt/oracle/product/21c/dbhomeXE \
     PATH=$PATH:/opt/oracle/product/21c/dbhomeXE/bin \
